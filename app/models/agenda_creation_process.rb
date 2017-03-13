@@ -5,10 +5,11 @@ class AgendaCreationProcess
   include Rails.application.routes.url_helpers
 
   STEPS = [
+    :filter_selection,
     :course_selection,
     :group_selection,
   ].freeze
-  STEP_COURSE_SELECTION, STEP_GROUP_SELECTION = STEPS
+  STEP_FILTER_SELECTION, STEP_COURSE_SELECTION, STEP_GROUP_SELECTION = STEPS
 
   define_model_callbacks(*STEPS, only: :before)
 
@@ -22,7 +23,7 @@ class AgendaCreationProcess
   end
 
   def save
-    run_callbacks(step) { last_step? ? combine : agenda.save }
+    run_callbacks(step) { last_step? ? combine : agenda.save(context: step) }
   end
 
   def step
@@ -32,7 +33,7 @@ class AgendaCreationProcess
   private
 
   def steps
-    agenda.filter_groups? ? STEPS : Array(STEP_COURSE_SELECTION)
+    agenda.filter_groups? ? STEPS : STEPS[0..1]
   end
 
   def next_step

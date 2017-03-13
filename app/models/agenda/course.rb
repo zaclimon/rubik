@@ -6,6 +6,7 @@ class Agenda::Course < ApplicationRecord
 
   belongs_to :academic_degree_term_course
   belongs_to :agenda, inverse_of: :courses, touch: true
+  belongs_to :course_term
 
   serialize :group_numbers, JSON
 

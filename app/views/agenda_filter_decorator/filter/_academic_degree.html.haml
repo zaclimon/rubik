@@ -1,0 +1,4 @@
+.form-group
+  = label_tag :academic_degree_name, t(".academic_degree_name"), class: "col-sm-4 control-label"
+  .col-sm-8
+    = text_field_tag :academic_degree_name, academic_degree.object.name, disabled: true, readonly: true, class: "form-control"

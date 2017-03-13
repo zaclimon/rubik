@@ -132,8 +132,9 @@ fr:
     breadcrumb:
       terms: Trimestres
       agendas:
-        course_selection: Choix de cours
-        group_selection: Choix de groupes
+        filter_selection: Filtres
+        course_selection: Cours
+        group_selection: Groupes
       schedules: Horaires
     footer:
       message_html: "&copy; Krystian Czesak | <a title=\"Github\" href=\"https://github.com/Krystosterone/rubik\" target=\"_blank\">Github</a>"

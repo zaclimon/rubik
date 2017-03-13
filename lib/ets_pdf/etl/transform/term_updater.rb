@@ -29,9 +29,17 @@ class EtsPdf::Etl::Transform::TermUpdater
     bachelor_types.each do |bachelor_type, bachelors_data|
       term_tags =
         TERM_TAGS.key?(bachelor_type) ? TERM_TAGS[bachelor_type] : raise("Invalid bachelor type \"#{bachelor_type}\"")
-      term = Term.where(year: @year, name: term_name, tags: term_tags).first_or_create!
+      # term = Term.where(year: @year, name: term_name, tags: term_tags).first_or_create!
+      term = Term.where(year: @year, name: term_name).first_or_create!
+      term_tag =
+        if term_tags.nil?
+          nil
+        else
+          term.term_tags.where(label: term_tags, scope: :group).first_or_create!
+        end
+      # term_tag = Tag.where(label: term_tags, scope: :group, taggable_type: Term, taggable_id: term.id).first_or_create!
 
-      EtsPdf::Etl::Transform::BachelorUpdater.new(term, bachelors_data).execute
+      EtsPdf::Etl::Transform::BachelorUpdater.new(term, term_tag, bachelors_data).execute
     end
   end
 end

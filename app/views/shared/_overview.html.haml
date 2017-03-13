@@ -4,12 +4,14 @@
       .form-group
         = label_tag :term_title, t(".term_title"), class: "col-sm-4 control-label"
         .col-sm-8
-          = text_field_tag :term_title, term_title(@agenda.term), disabled: true, readonly: true, class: "form-control"
+          -#= text_field_tag :term_title, term_title(@term), disabled: true, readonly: true, class: "form-control"
+          = text_field_tag :term_title, @agenda.term.name, disabled: true, readonly: true, class: "form-control"
 
-      .form-group
-        = label_tag :academic_degree_name, t(".academic_degree_name"), class: "col-sm-4 control-label"
-        .col-sm-8
-          = text_field_tag :academic_degree_name, @agenda.academic_degree_name, disabled: true, readonly: true,
-            class: "form-control"
+      - @agenda.agenda_term_tags.each do |agenda_term_tag|
+        .form-group
+          = label_tag agenda_term_tag.term_tag.scope, t(".#{agenda_term_tag.term_tag.scope}"), class: "col-sm-4 control-label"
+          .col-sm-8
+            = text_field_tag agenda_term_tag.term_tag.scope, agenda_term_tag.term_tag.label, disabled: true, readonly: true, class: "form-control"
+
 
       = yield

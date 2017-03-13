@@ -30,6 +30,13 @@ class EtsPdf::Etl::Transform::PeriodUpdater
   end
 
   def execute
+    # period = @group.periods.find { |period| period.starts_at == starts_at && period.ends_at == ends_at }
+    # if period.nil?
+    #   @group.periods << Period.new(type: type, ends_at: ends_at, starts_at: starts_at)
+    # else
+    #   raise "FUUUUUUU" if period.type != type || period.starts_at != starts_at || period.ends_at != ends_at
+    # end
+
     period = @group.find_or_initialize_period_by(starts_at: starts_at, ends_at: ends_at)
     period.type = type
   end

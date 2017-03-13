@@ -6,6 +6,8 @@
 = form_for @newsletter_subscription, url: create_newsletter_subscription_terms_path,
   html: { class: "form-horizontal" } do |f|
   .container
+    %h1.page-header Trimestres
+
     = render "shared/google_adsense"
     = render "shared/flash_messages"
 
@@ -26,6 +28,14 @@
 
         = f.submit class: "col-xs-12 col-sm-4 pull-right btn btn-primary btn-sm"
 
-.container
-  - @terms.each_slice(2) do |terms_slice|
-    .row= render partial: "term", collection: terms_slice
+  .container
+    - @terms.to_a.group_by(&:year).each_slice(3) do |terms_slice|
+      .row
+        - terms_slice.each do |year, terms|
+          .col-sm-4
+            .panel.panel-default
+              .panel-heading= year
+
+              .list-group
+              - terms.each do |term|
+                = link_to term.name, new_term_agenda_path(term), class: "list-group-item"

@@ -11,7 +11,8 @@
 
   %h1.page-header= t(".title")
 
-= form_for [@academic_degree_term, @agenda] do |agenda_fields|
+-#= form_for [@academic_degree_term, @agenda] do |agenda_fields|
+= form_for @agenda do |agenda_fields|
   = hidden_field_tag :step, step
   = render "shared/overview", f: agenda_fields
 
