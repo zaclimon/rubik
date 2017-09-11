@@ -160,7 +160,7 @@ FactoryGirl.define do
   sequence(:name) { |n| "Name #{n}" }
   sequence(:number) { |n| n }
   sequence(:short_weekday) { |n| I18n.t("date.abbr_day_names")[n % 7].titleize }
-  sequence(:tags) { |n| n.to_s }
+  sequence(:tags, &:to_s)
   sequence(:time) { |n| "#{(n / 60).to_s.rjust(2, '0')}:#{(n % 60).to_s.rjust(2, '0')}" }
   sequence(:type) { |n| "Type #{n}" }
   sequence(:year) { |n| n }
