@@ -10,23 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170916011551) do
-
-  create_table "academic_degrees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "code"
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["code"], name: "index_academic_degrees_on_code", unique: true, using: :btree
-  end
+ActiveRecord::Schema.define(version: 20170930022302) do
 
   create_table "agenda_courses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "agenda_id"
+    t.integer  "course_term_id"
     t.boolean  "mandatory"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.text     "group_numbers",  limit: 65535
-    t.integer  "course_term_id"
     t.index ["agenda_id"], name: "agenda_courses_index", unique: true, using: :btree
     t.index ["agenda_id"], name: "index_agenda_courses_on_agenda_id", using: :btree
     t.index ["course_term_id"], name: "index_agenda_courses_on_course_term_id", using: :btree
@@ -42,6 +34,7 @@ ActiveRecord::Schema.define(version: 20170916011551) do
   end
 
   create_table "agendas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "term_id"
     t.string   "token"
     t.integer  "courses_per_schedule"
     t.text     "leaves",               limit: 65535
@@ -50,32 +43,13 @@ ActiveRecord::Schema.define(version: 20170916011551) do
     t.datetime "combined_at"
     t.boolean  "processing"
     t.boolean  "filter_groups"
-    t.integer  "academic_degree_id"
-    t.integer  "term_id"
+    t.index ["term_id"], name: "index_agendas_on_term_id", using: :btree
     t.index ["token"], name: "index_agendas_on_token", using: :btree
   end
 
   create_table "comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_email"
     t.text   "body",       limit: 65535
-  end
-
-  create_table "course_term_group_term_tags", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "course_term_group_id"
-    t.integer  "term_tag_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.index ["course_term_group_id"], name: "index_course_term_group_term_tags_on_course_term_group_id", using: :btree
-    t.index ["term_tag_id"], name: "index_course_term_group_term_tags_on_term_tag_id", using: :btree
-  end
-
-  create_table "course_term_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "course_term_id"
-    t.integer  "number"
-    t.text     "periods",        limit: 65535
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.index ["course_term_id"], name: "index_course_term_groups_on_course_term_id", using: :btree
   end
 
   create_table "course_terms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -93,6 +67,24 @@ ActiveRecord::Schema.define(version: 20170916011551) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["code"], name: "index_courses_on_code", unique: true, using: :btree
+  end
+
+  create_table "group_term_tags", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "group_id"
+    t.integer  "term_tag_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["group_id"], name: "index_group_term_tags_on_group_id", using: :btree
+    t.index ["term_tag_id"], name: "index_group_term_tags_on_term_tag_id", using: :btree
+  end
+
+  create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "course_term_id"
+    t.integer  "number"
+    t.text     "periods",        limit: 65535
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.index ["course_term_id"], name: "index_groups_on_course_term_id", using: :btree
   end
 
   create_table "newsletter_subscriptions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

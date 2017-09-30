@@ -24,8 +24,7 @@ class EtsPdf::Etl::PeriodBuilder < SimpleClosure
     "TP-Labo/2" => "TP-Labo/2",
   }.freeze
 
-  def initialize(group, parsed_lines)
-    @group = group
+  def initialize(parsed_lines)
     @parsed_lines = parsed_lines
   end
 
@@ -37,7 +36,7 @@ class EtsPdf::Etl::PeriodBuilder < SimpleClosure
       .map(&method(:normalize_ends_at))
       .map(&method(:normalize_starts_at))
       .map(&method(:normalize_type))
-      .each(&method(:build_period))
+      .map(&method(:build_period))
   end
 
   private
@@ -75,7 +74,7 @@ class EtsPdf::Etl::PeriodBuilder < SimpleClosure
   end
 
   def build_period(attributes)
-    @group.find_or_initialize_period_by(attributes.except(:weekday_index))
+    Period.new(attributes.except(:weekday_index))
   end
 
   def normalize_time(attributes, from_attribute, to_attribute)
