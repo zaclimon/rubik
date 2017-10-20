@@ -12,7 +12,6 @@ class AcademicDegreeTermCourse < ApplicationRecord
   serialize :groups, GroupsSerializer
   serialized_find_or_initialize_for :groups
 
-  default_scope { includes(:course).order("courses.code") }
   delegate :code, to: :course
 
   def group_numbers

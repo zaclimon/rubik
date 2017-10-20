@@ -17,6 +17,12 @@ class AgendaCreationProcess
   attr_accessor :agenda
   attr_writer :step
 
+  def agenda
+    @agenda ||= begin
+
+    end
+  end
+
   def path
     last_step? ? processing_agenda_schedules_path(agenda) : edit_agenda_path(agenda, step: next_step)
   end

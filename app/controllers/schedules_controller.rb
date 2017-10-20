@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 class SchedulesController < ApplicationController
-  include AgendaEagerLoading
   include SchedulePaginationHelper
 
   before_action :find_agenda
   before_action :ensure_not_processing,
                 :ensure_schedules_present, only: :index
   before_action :ensure_processing, only: :processing
-  before_action :eager_load_courses, except: :processing
   skip_before_action :show_navigation, only: :processing
 
   helper_method :course_colors
@@ -30,8 +28,12 @@ class SchedulesController < ApplicationController
     params.require(:agenda_token)
   end
 
+  def find_agenda
+    @agenda = Agenda.find_by!(token: agenda_token)
+  end
+
   def find_schedules
-    @agenda.schedules.includes(:agenda).page(params[:page]).per(SCHEDULES_PER_PAGE).presence
+    @agenda.schedules.page(params[:page]).per(SCHEDULES_PER_PAGE).presence
   end
 
   def ensure_schedules_present

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class AgendasController < ApplicationController
-  include AgendaEagerLoading
   include BrowserCaching
 
   before_action :invalidate_browser_cache
@@ -8,7 +7,6 @@ class AgendasController < ApplicationController
                 :instantiate_agenda, only: [:new, :create]
   before_action :find_agenda,
                 :ensure_not_processing, only: [:edit, :update]
-  before_action :eager_load_courses
   before_action :assign_attributes, only: [:create, :update]
   before_action :save, only: [:create, :update]
 
@@ -29,6 +27,14 @@ class AgendasController < ApplicationController
 
   private
 
+  def agenda_token
+    params.require(:token)
+  end
+
+  def find_agenda
+    @agenda = Agenda.find_by!(token: agenda_token)
+  end
+
   def assign_academic_degree_term
     @academic_degree_term = AcademicDegreeTerm.enabled.find(params[:academic_degree_term_id])
   end
@@ -44,10 +50,6 @@ class AgendasController < ApplicationController
       courses_attributes: [:_destroy, :academic_degree_term_course_id, :id, :mandatory, { group_numbers: [] }],
       leaves_attributes: [:_destroy, :ends_at, :starts_at]
     )
-  end
-
-  def agenda_token
-    params.require(:token)
   end
 
   def assign_attributes
