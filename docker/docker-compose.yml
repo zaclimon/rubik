@@ -1,0 +1,11 @@
+version: '3.1'
+services:
+  db:
+    image: mysql:5
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+  rubik:
+    build: .
+    command: bash -c "bundle exec rails db:create db:migrate db:test:prepare db:seed"
+    depends_on:
+      - db
